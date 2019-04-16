@@ -52,6 +52,57 @@ class TableCell extends Block {
 TableCell.blotName = 'table';
 TableCell.tagName = 'TD';
 
+class TableHeader extends Block {
+  static create(value) {
+    const node = super.create();
+    if (value) {
+      node.setAttribute('data-row', value);
+    } else {
+      node.setAttribute('data-row', tableId());
+    }
+    return node;
+  }
+
+  static formats(domNode) {
+    if (domNode.hasAttribute('data-row')) {
+      return domNode.getAttribute('data-row');
+    }
+    return undefined;
+  }
+
+  cellOffset() {
+    if (this.parent) {
+      return this.parent.children.indexOf(this);
+    }
+    return -1;
+  }
+
+  format(name, value) {
+    if (name === TableHeader.blotName && value) {
+      this.domNode.setAttribute('data-row', value);
+    } else {
+      super.format(name, value);
+    }
+  }
+
+  row() {
+    return this.parent;
+  }
+
+  rowOffset() {
+    if (this.row()) {
+      return this.row().rowOffset();
+    }
+    return -1;
+  }
+
+  table() {
+    return this.row() && this.row().table();
+  }
+}
+TableHeader.blotName = 'tableHeader';
+TableHeader.tagName = 'TH';
+
 class TableRow extends Container {
   checkMerge() {
     if (super.checkMerge() && this.next.children.head != null) {
@@ -114,10 +165,14 @@ class TableContainer extends Container {
     rows.forEach(row => {
       new Array(maxColumns - row.children.length).fill(0).forEach(() => {
         let value;
+        const ref = row.children.head;
+        const klass =
+          (ref && (ref instanceof TableCell ? TableCell : TableHeader)) ||
+          TableCell;
         if (row.children.head != null) {
-          value = TableCell.formats(row.children.head.domNode);
+          value = klass.formats(row.children.head.domNode);
         }
-        const blot = this.scroll.create(TableCell.blotName, value);
+        const blot = this.scroll.create(klass.blotName, value);
         row.appendChild(blot);
         blot.optimize(); // Add break blot
       });
@@ -144,8 +199,9 @@ class TableContainer extends Container {
     if (body == null || body.children.head == null) return;
     body.children.forEach(row => {
       const ref = row.children.at(index);
-      const value = TableCell.formats(row.children.head.domNode);
-      const cell = this.scroll.create(TableCell.blotName, value);
+      const klass = ref instanceof TableCell ? TableCell : TableHeader;
+      const value = klass.formats(row.children.head.domNode);
+      const cell = this.scroll.create(klass.blotName, value);
       row.insertBefore(cell, ref);
     });
   }
@@ -178,8 +234,9 @@ TableBody.requiredContainer = TableContainer;
 TableBody.allowedChildren = [TableRow];
 TableRow.requiredContainer = TableBody;
 
-TableRow.allowedChildren = [TableCell];
+TableRow.allowedChildren = [TableHeader, TableCell];
 TableCell.requiredContainer = TableRow;
+TableHeader.requiredContainer = TableRow;
 
 function tableId() {
   const id = Math.random()
@@ -188,4 +245,4 @@ function tableId() {
   return `row-${id}`;
 }
 
-export { TableCell, TableRow, TableBody, TableContainer, tableId };
+export { TableCell, TableRow, TableBody, TableContainer, tableId, TableHeader };

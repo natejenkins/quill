@@ -272,6 +272,7 @@ function isLine(node) {
     'section',
     'table',
     'td',
+    'th',
     'tr',
     'ul',
     'video',
@@ -468,7 +469,11 @@ function matchTable(node, delta) {
       : node.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));
   const row = rows.indexOf(node) + 1;
-  return applyFormat(delta, 'table', row);
+  const type =
+    node.childNodes[0] && node.childNodes[0].nodeName === 'TH'
+      ? 'tableHeader'
+      : 'table';
+  return applyFormat(delta, type, row);
 }
 
 function matchText(node, delta) {

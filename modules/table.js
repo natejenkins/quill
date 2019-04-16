@@ -3,6 +3,7 @@ import Quill from '../core/quill';
 import Module from '../core/module';
 import {
   TableCell,
+  TableHeader,
   TableRow,
   TableBody,
   TableContainer,
@@ -12,6 +13,7 @@ import {
 class Table extends Module {
   static register() {
     Quill.register(TableCell);
+    Quill.register(TableHeader);
     Quill.register(TableRow);
     Quill.register(TableBody);
     Quill.register(TableContainer);
@@ -54,7 +56,12 @@ class Table extends Module {
   getTable(range = this.quill.getSelection()) {
     if (range == null) return [null, null, null, -1];
     const [cell, offset] = this.quill.getLine(range.index);
-    if (cell == null || cell.statics.blotName !== TableCell.blotName) {
+    if (
+      cell == null ||
+      [TableCell.blotName, TableHeader.blotName].indexOf(
+        cell.statics.blotName,
+      ) < 0
+    ) {
       return [null, null, null, -1];
     }
     const row = cell.parent;
@@ -114,13 +121,18 @@ class Table extends Module {
     this.insertRow(1);
   }
 
-  insertTable(rows, columns) {
+  insertTable(rows, columns, options={}) {
     const range = this.quill.getSelection();
     if (range == null) return;
-    const delta = new Array(rows).fill(0).reduce(memo => {
-      const text = new Array(columns).fill('\n').join('');
+    const text = new Array(columns).fill('\n').join('');
+    let delta = new Delta().retain(range.index)
+    if(true || options["headerRow"]){
+      delta.insert(text, { tableHeader: tableId() });
+    }
+    delta = new Array(rows).fill(0).reduce(memo => {
       return memo.insert(text, { table: tableId() });
-    }, new Delta().retain(range.index));
+    }, delta);
+    console.info(delta)
     this.quill.updateContents(delta, Quill.sources.USER);
     this.quill.setSelection(range.index, Quill.sources.SILENT);
     this.balanceTables();
@@ -129,7 +141,9 @@ class Table extends Module {
   listenBalanceCells() {
     this.quill.on(Quill.events.SCROLL_OPTIMIZE, mutations => {
       mutations.some(mutation => {
-        if (['TD', 'TR', 'TBODY', 'TABLE'].includes(mutation.target.tagName)) {
+        if (
+          ['TD', 'TH', 'TR', 'TBODY', 'TABLE'].includes(mutation.target.tagName)
+        ) {
           this.quill.once(Quill.events.TEXT_CHANGE, (delta, old, source) => {
             if (source !== Quill.sources.USER) return;
             this.balanceTables();

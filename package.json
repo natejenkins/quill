@@ -148,6 +148,7 @@
     "build": "npm run lint && npm run build:webpack",
     "build:webpack": "webpack --config _develop/webpack.config.js; rm dist/quill.core dist/quill.bubble dist/quill.snow",
     "build:release": "./_develop/scripts/release.sh",
+    "watch": "./node_modules/.bin/webpack --config _develop/webpack.config.js -w",
     "lint": "eslint blots core formats modules themes ui test",
     "start": "npm run build:webpack; bundle exec foreman start -f _develop/procfile",
     "test": "npm run test:unit",
