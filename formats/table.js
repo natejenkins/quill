@@ -51,53 +51,14 @@ class TableCell extends Block {
 }
 TableCell.blotName = 'table';
 TableCell.tagName = 'TD';
-
-class TableHeader extends Block {
-  static create(value) {
-    const node = super.create();
-    if (value) {
-      node.setAttribute('data-row', value);
-    } else {
-      node.setAttribute('data-row', tableId());
-    }
-    return node;
-  }
-
-  static formats(domNode) {
-    if (domNode.hasAttribute('data-row')) {
-      return domNode.getAttribute('data-row');
-    }
-    return undefined;
-  }
-
-  cellOffset() {
-    if (this.parent) {
-      return this.parent.children.indexOf(this);
-    }
-    return -1;
-  }
-
+console.info("NEW TABLES")
+class TableHeader extends TableCell {
   format(name, value) {
     if (name === TableHeader.blotName && value) {
       this.domNode.setAttribute('data-row', value);
     } else {
       super.format(name, value);
     }
-  }
-
-  row() {
-    return this.parent;
-  }
-
-  rowOffset() {
-    if (this.row()) {
-      return this.row().rowOffset();
-    }
-    return -1;
-  }
-
-  table() {
-    return this.row() && this.row().table();
   }
 }
 TableHeader.blotName = 'tableHeader';

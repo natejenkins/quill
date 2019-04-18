@@ -132,7 +132,6 @@ class Table extends Module {
     delta = new Array(rows).fill(0).reduce(memo => {
       return memo.insert(text, { table: tableId() });
     }, delta);
-    console.info(delta)
     this.quill.updateContents(delta, Quill.sources.USER);
     this.quill.setSelection(range.index, Quill.sources.SILENT);
     this.balanceTables();
