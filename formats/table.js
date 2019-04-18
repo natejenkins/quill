@@ -51,7 +51,6 @@ class TableCell extends Block {
 }
 TableCell.blotName = 'table';
 TableCell.tagName = 'TD';
-console.info("NEW TABLES")
 class TableHeader extends TableCell {
   format(name, value) {
     if (name === TableHeader.blotName && value) {

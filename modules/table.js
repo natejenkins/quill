@@ -121,12 +121,12 @@ class Table extends Module {
     this.insertRow(1);
   }
 
-  insertTable(rows, columns, options={}) {
+  insertTable(rows, columns, options = {}) {
     const range = this.quill.getSelection();
     if (range == null) return;
     const text = new Array(columns).fill('\n').join('');
-    let delta = new Delta().retain(range.index)
-    if(true || options["headerRow"]){
+    let delta = new Delta().retain(range.index);
+    if (options.headerRow) {
       delta.insert(text, { tableHeader: tableId() });
     }
     delta = new Array(rows).fill(0).reduce(memo => {
