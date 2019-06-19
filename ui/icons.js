@@ -25,6 +25,7 @@ import subscriptIcon from '../assets/icons/subscript.svg';
 import superscriptIcon from '../assets/icons/superscript.svg';
 import strikeIcon from '../assets/icons/strike.svg';
 import tableIcon from '../assets/icons/table.svg';
+import tableDeleteColumnsIcon from '../assets/icons/table-delete-columns.svg';
 import underlineIcon from '../assets/icons/underline.svg';
 import videoIcon from '../assets/icons/video.svg';
 
@@ -69,6 +70,7 @@ export default {
   },
   strike: strikeIcon,
   table: tableIcon,
+  'table-delete-cells': tableDeleteColumnsIcon,
   underline: underlineIcon,
   video: videoIcon,
 };
