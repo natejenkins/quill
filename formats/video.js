@@ -41,10 +41,10 @@ class Video extends BlockEmbed {
     }
   }
 
-  html() {
-    const { video } = this.value();
-    return `<a href="${video}">${video}</a>`;
-  }
+  // html() {
+  //   const { video } = this.value();
+  //   return `<a href="${video}">${video}</a>`;
+  // }
 }
 Video.blotName = 'video';
 Video.className = 'ql-video';
