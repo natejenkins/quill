@@ -34,8 +34,11 @@ class Quill {
   }
 
   static register(path, target, overwrite = false) {
+    // console.info('registering ' + path);
+    // console.info(target);
     if (typeof path !== 'string') {
       const name = path.attrName || path.blotName;
+      console.info(name);
       if (typeof name === 'string') {
         // register(Blot | Attributor, overwrite)
         this.register(`formats/${name}`, path, target);

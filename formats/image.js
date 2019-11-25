@@ -1,11 +1,14 @@
 import { EmbedBlot } from 'parchment';
 import { sanitize } from './link';
 
-const ATTRIBUTES = ['alt', 'height', 'width'];
+const ATTRIBUTES = ['alt', 'height', 'width', 'style', 'data-align'];
+// const ATTRIBUTES = ['alt', 'height', 'width', 'float'];
 
 class Image extends EmbedBlot {
   static create(value) {
     const node = super.create(value);
+    console.info('CREATING IMAGE');
+    console.info(value);
     if (typeof value === 'string') {
       node.setAttribute('src', this.sanitize(value));
     }

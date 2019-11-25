@@ -66,7 +66,7 @@ Quill.register(
 
 Quill.register(
   {
-    'formats/align': AlignClass,
+    'formats/align': AlignStyle,
     'formats/direction': DirectionClass,
     'formats/indent': Indent,
 
