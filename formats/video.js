@@ -1,7 +1,7 @@
 import { BlockEmbed } from '../blots/block';
 import Link from './link';
 
-const ATTRIBUTES = ['height', 'width'];
+const ATTRIBUTES = ['height', 'width', 'display', 'margin', 'style'];
 
 class Video extends BlockEmbed {
   static create(value) {

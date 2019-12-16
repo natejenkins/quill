@@ -1,9 +1,10 @@
-import { EmbedBlot } from 'parchment';
+// import { EmbedBlot } from 'parchment';
+import { BlockEmbed } from '../blots/block';
 import { sanitize } from './link';
 
-const ATTRIBUTES = ['alt', 'height', 'width'];
+const ATTRIBUTES = ['alt', 'height', 'width', 'style'];
 
-class Image extends EmbedBlot {
+class Image extends BlockEmbed {
   static create(value) {
     const node = super.create(value);
     if (typeof value === 'string') {
@@ -13,6 +14,8 @@ class Image extends EmbedBlot {
   }
 
   static formats(domNode) {
+    console.info('CALLING FORMATS');
+    console.info(domNode);
     return ATTRIBUTES.reduce((formats, attribute) => {
       if (domNode.hasAttribute(attribute)) {
         formats[attribute] = domNode.getAttribute(attribute);
