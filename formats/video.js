@@ -41,10 +41,19 @@ class Video extends BlockEmbed {
     }
   }
 
-  // html() {
-  //   const { video } = this.value();
-  //   return `<a href="${video}">${video}</a>`;
-  // }
+  html() {
+    const { video } = this.value();
+    const outerHTML = this.domNode.outerHTML
+    let formats = this.formats()
+    let {height, width} = formats
+    if(height === '100%'){
+      return `<div style="position: relative; height: 0; padding-bottom: 56.25%;">${outerHTML}</iframe></div>`;
+      // return `<div style="position: relative; height: 0; padding-bottom: 56.25%;"><iframe src="${video}" height="100%" width="100%" frameborder="0" allowfullscreen="true" ></iframe></div>`;
+    }
+    return outerHTML
+    // return `<div style="position: relative; height: ${height}px; width: ${width}px;">${outerHTML}</div>`;
+    // return `<div style="position: relative; height: ${height}px; width: ${width}px;"><iframe src="${video}" height="${height}px" width="${width}px" frameborder="0" allowfullscreen="true" ></iframe></div>`;
+  }
 }
 Video.blotName = 'video';
 Video.className = 'ql-video';
